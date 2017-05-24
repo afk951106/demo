@@ -1,12 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>123</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet">
-    </head>
-    <body>
-    
-    </body>
+
+<head>
+    <title>0524   Demo`</title>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <style>
+        .text-indent {
+            text-indent: 28px;
+        }
+    </style>
+    <script>
+        var newsData = [{
+                id: 0,
+                name: "鍾佳陞"
+            },
+            {
+                id: 1,
+                name: "李威翰"
+            },
+            {
+                id: 2,
+                name: "陳泓仲"
+            }
+        ];
+
+        $(function () {
+            fetchDropDownData();
+            bindAlinkClick();
+            getAllNews();
+            setCreateTime();
+            setButtonDefaultState();
+        });
+
+        function fetchDropDownData() {
+            var dropdownData = ['鍾佳陞', '李威翰', '陳泓仲'];
+            for (var s = 0; s < dropdownData.length; s++) {
+                $('.dropdown-menu').append(' <li><a href="#">' + dropdownData[s] + '</a></li>');
+            }
+        }
+
+        function bindAlinkClick() {
+            $('.dropdown-menu li').each(function () {
+                $(this).on('click', function () {
+                    alert($('a', this).html());
+                });
+            });
+        }
+
+        function getAllNews() {
+            $('.row').empty();
+            for (var s = 0; s < newsData.length; s++) {
+                if (newsData[s] == undefined) {
+                    continue;
+                }
+                var data = '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 item" ' +
+                    'data-id= ' + newsData[s].id + '>' +
+                    '<a href="#">' +
+                    '<img class="img-responsive" src="http://placehold.it/700x400" alt="">' +
+                    '</a>' +
+                    '<h3 class="text-center">' +
+                    '<a href="#">' +
+                    newsData[s].name +
+                    '</a>' +
+                    ' <button type="button" class="btn btn-sm btn-default btn-edit-z"' +
+                    ' data-id=' + '\'' + newsData[s].id + '\'' +
+                    '>' +
+                    '<span class="glyphicon glyphicon-pencil "></span>編輯' +
+                    ' </button>' +
+                    ' <button type="button" class="btn btn-sm btn-danger btn-remove-z">' +
+                    ' <span class="glyphicon glyphicon-remove"></span>刪除' +
+                    '</button>' +
+                    ' <button type="button" class="btn btn-sm btn-primary btn-sucess-z">' +
+                    ' <span class="glyphicon glyphicon-ok"></span>確定' +
+                    '</button>' +
+                    ' </h3>' +
+                    '<p class="text-justify text-indent">南韓巨星夫妻檔Rain與金泰希愛情長跑近5年，終於在年初完婚，2人從公布結婚到步入禮堂超迅速，好友申世鎬（音譯）20日在節目上，打電話給剛新婚的他「一起上夜店」，他的回答被現場女來賓讚爆：「金泰希嫁對人了！」</p>' +
+                    '' +
+                    '<p class="text-right time-bar">' +
+                    '<span class="glyphicon glyphicon-time"></span> 發表於' +
+                    '</p>' +
+                    '</div>';
+                $('.row').append(data);
+            }
+            $('.btn-remove-z, .btn-sucess-z').hide();
+            $('.item').each(function (index, element) {
+                //此處 可以用 element 或 this 意思一樣 
+                $('.btn-edit-z', element).on('click', $(this).data('id'), function (event) {
+                    $(element).find('.btn-remove-z, .btn-sucess-z').show();
+                    $(this).hide();
+                });
+                $('.btn-sucess-z', this).on('click', function () {
+                    $(element).find('.btn-edit-z').show();
+                    $('.btn-sucess-z, .btn-remove-z', element).hide();
+                });
+                $('.btn-remove-z', this).on('click', $(this).data('id'), function (event) {
+                    console.log(event.data);
+                    delete newsData[event.data];
+                    getAllNews();
+                });
+            });
+        }
+
+        function setCreateTime() {
+            var time = moment().format('MMMM Do YYYY, h:mm');
+            $('.time-bar').append(time);
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Title</a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#">Link</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <a href="#">
+                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
+                </a>
+                <h3 class="text-center">
+                    <a href="#">Demo1</a>
+                    <button type="button" class="btn btn-sm btn-default">
+                        <span class="glyphicon glyphicon-pencil"></span>編輯
+                    </button>
+                    <button type="button" class="btn btn-sm btn-danger">
+                        <span class="glyphicon glyphicon-remove"></span>刪除
+                    </button>
+                    <button type="button" class="btn btn-sm btn-primary">
+                        <span class="glyphicon glyphicon-ok"></span>確定
+                    </button>
+                </h3>
+                <h3 class="text-right"> </h3>
+                <p class="text-justify text-indent">南韓巨星夫妻檔Rain與金泰希愛情長跑近5年，終於在年初完婚，2人從公布結婚到步入禮堂超迅速，好友申世鎬（音譯）20日在節目上，打電話給剛新婚的他「一起上夜店」，他的回答被現場女來賓讚爆：「金泰希嫁對人了！」</p>
+
+                <p class="text-right time-bar">
+                    <span class="glyphicon glyphicon-time"></span> 發表於
+                </p>
+            </div>-->
+        </div>
+    </div>
+
+
+
+</body>
+
 </html>
